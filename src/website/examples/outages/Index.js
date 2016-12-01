@@ -19,7 +19,6 @@ import { TimeSeries, TimeRangeEvent, TimeRange } from "pondjs";
 import ChartContainer from "../../../components/ChartContainer";
 import ChartRow from "../../../components/ChartRow";
 import Charts from "../../../components/Charts";
-import LabelAxis from "../../../components/LabelAxis";
 import EventChart from "../../../components/EventChart";
 import Resizable from "../../../components/Resizable";
 
@@ -123,19 +122,17 @@ const outages = React.createClass({
                                 enablePanZoom={true}
                                 onTimeRangeChanged={this.handleTimeRangeChange}>
                                 <ChartRow height="30">
-                                    <LabelAxis
-                                        hideScale={true}
-                                        id="outages"
-                                        label="Outages"
-                                        values={[]}
-                                        min={0}
-                                        max={0}
-                                        width={140}
-                                        type="linear"
-                                        format=",.1f"/>
                                     <Charts>
                                         <EventChart
-                                            axis="outages"
+                                            series={series}
+                                            size={45}
+                                            style={outageEventStyleFunc}
+                                            label={e => e.get("title")} />
+                                    </Charts>
+                                </ChartRow>
+                                <ChartRow height="30">
+                                    <Charts>
+                                        <EventChart
                                             series={series}
                                             size={45}
                                             style={outageEventStyleFunc}

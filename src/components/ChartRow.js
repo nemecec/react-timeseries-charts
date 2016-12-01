@@ -311,18 +311,36 @@ export default class ChartRow extends React.Component {
       if (child.type === Charts) {
         const charts = child;
         React.Children.forEach(charts.props.children, (chart) => {
+          let scale = null;
+          if (_.has(this.state.yAxisScalerMap, chart.props.axis)) {
+            scale = this.state.yAxisScalerMap[chart.props.axis];
+          }
+
+          let ytransition = null;
+          if (_.has(this.scaleMap, chart.props.axis)) {
+            ytransition = this.scaleMap[chart.props.axis];
+          }
+
           const chartProps = {
             key: keyCount,
             width: chartWidth,
             height: innerHeight,
             timeScale: this.props.timeScale,
             timeFormat: this.props.timeFormat,
-            yScale: this.state.yAxisScalerMap[chart.props.axis],
-            transition: this.scaleMap[chart.props.axis].transition(),
           };
+
+          if (scale) {
+            chartProps.yScale = scale;
+          }
+
+          if (ytransition) {
+            chartProps.transition = ytransition;
+          }
+
           chartList.push(
             React.cloneElement(chart, chartProps)
           );
+
           keyCount += 1;
         });
       }

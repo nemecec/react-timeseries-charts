@@ -13,6 +13,7 @@
 import React from "react";
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
+import { scaleLinear } from 'd3-scale';
 
 // Pond
 import { TimeSeries } from "pondjs";
@@ -88,6 +89,10 @@ const currency = React.createClass({
             euroValue = `${f(trackerEvent.get("euro"))}`;
         }
 
+        const scale = scaleLinear()
+            .domain([0.5, 1.5])
+            .range([500, 0]);
+
         return (
             <div>
                 <div className="row" style={{height: 28}}>
@@ -124,17 +129,9 @@ const currency = React.createClass({
                                 onTimeRangeChanged={this.handleTimeRangeChange}
                                 minDuration={1000 * 60 * 60 * 24 * 30} >
                                 <ChartRow height="500">
-                                    <YAxis
-                                        id="y"
-                                        label="Price ($)"
-                                        min={0.5}
-                                        max={1.5}
-                                        width="60"
-                                        type="linear"
-                                        format="$,.2f" />
                                     <Charts>
                                         <LineChart
-                                            axis="y"
+                                            yScale={scale}
                                             breakLine={false}
                                             series={currencySeries}
                                             columns={["aud", "euro"]}
@@ -145,7 +142,7 @@ const currency = React.createClass({
                                             selection={this.state.selection}
                                             onSelectionChange={selection => this.setState({selection})} />
                                         <Baseline
-                                            axis="y"
+                                            yScale={scale}
                                             value={1.0}
                                             label="USD Baseline"
                                             position="right" />
